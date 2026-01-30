@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Inscription</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    margin:0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(circle at top, #00ff88, #0f0f0f);
+    color:#fff;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow-x:hidden;
+    padding:20px;
+  }
+
+  .container {
+    display:flex;
+    width:100%;
+    max-width:1000px;
+    min-height:600px;
+    background:#151515;
+    border-radius:25px;
+    overflow:hidden;
+    box-shadow:0 0 40px rgba(0,255,136,0.9);
+    animation: slideUp 0.8s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform:translateY(30px); opacity:0; }
+    to { transform:translateY(0); opacity:1; }
+  }
+
+  .left-panel {
+    flex:1;
+    background:linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,255,136,0.05));
+    padding:40px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .left-panel:before {
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M30,30 Q50,20 70,30 T90,30" fill="none" stroke="%2300ff88" stroke-width="0.5" opacity="0.3"/><path d="M10,50 Q30,40 50,50 T90,50" fill="none" stroke="%2300ff88" stroke-width="0.5" opacity="0.3"/><path d="M20,70 Q40,60 60,70 T80,70" fill="none" stroke="%2300ff88" stroke-width="0.5" opacity="0.3"/></svg>');
+    opacity:0.1;
+  }
+
+  .logo {
+    font-size:2.5em;
+    color:#00ff88;
+    margin-bottom:20px;
+    text-align:center;
+    animation: pulse 2s infinite alternate;
+  }
+
+  @keyframes pulse {
+    from { transform:scale(1); text-shadow:0 0 10px rgba(0,255,136,0.5); }
+    to { transform:scale(1.05); text-shadow:0 0 20px rgba(0,255,136,0.8); }
+  }
+
+  .welcome-text {
+    text-align:center;
+    margin-bottom:30px;
+  }
+
+  .welcome-text h2 {
+    font-size:2em;
+    color:#00ff88;
+    margin-bottom:10px;
+  }
+
+  .welcome-text p {
+    color:#ccc;
+    font-size:1.1em;
+    line-height:1.6;
+  }
+
+  .features {
+    margin-top:30px;
+  }
+
+  .feature {
+    display:flex;
+    align-items:center;
+    margin-bottom:20px;
+    padding:15px;
+    background:rgba(255,255,255,0.05);
+    border-radius:12px;
+    transition:transform 0.3s ease, background 0.3s ease;
+  }
+
+  .feature:hover {
+    transform:translateX(10px);
+    background:rgba(0,255,136,0.1);
+  }
+
+  .feature-icon {
+    font-size:1.5em;
+    margin-right:15px;
+    color:#00ff88;
+  }
+
+  .feature-text {
+    flex:1;
+  }
+
+  .feature-text h3 {
+    color:#fff;
+    font-size:1.1em;
+    margin-bottom:5px;
+  }
+
+  .feature-text p {
+    color:#aaa;
+    font-size:0.9em;
+  }
+
+  .right-panel {
+    flex:1;
+    padding:40px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+
+  .form-container {
+    width:100%;
+    max-width:400px;
+    margin:0 auto;
+  }
+
+  .form-header {
+    text-align:center;
+    margin-bottom:30px;
+  }
+
+  .form-header h2 {
+    font-size:2em;
+    color:#fff;
+    margin-bottom:10px;
+  }
+
+  .form-header p {
+    color:#aaa;
+  }
+
+  .form-group {
+    margin-bottom:20px;
+  }
+
+  .form-label {
+    display:block;
+    margin-bottom:8px;
+    color:#00ff88;
+    font-weight:600;
+    font-size:0.95em;
+  }
+
+  .form-input {
+    width:100%;
+    padding:15px;
+    background:rgba(255,255,255,0.08);
+    border:2px solid rgba(255,255,255,0.1);
+    border-radius:12px;
+    color:#fff;
+    font-size:1em;
+    transition:all 0.3s ease;
+  }
+
+  .form-input:focus {
+    outline:none;
+    border-color:#00ff88;
+    box-shadow:0 0 0 3px rgba(0,255,136,0.2);
+    background:rgba(255,255,255,0.12);
+  }
+
+  .form-input::placeholder {
+    color:#888;
+  }
+
+  .password-container {
+    position:relative;
+  }
+
+  .toggle-password {
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+    background:none;
+    border:none;
+    color:#00ff88;
+    cursor:pointer;
+    font-size:1.2em;
+  }
+
+  .terms {
+    display:flex;
+    align-items:flex-start;
+    margin-bottom:25px;
+  }
+
+  .terms input {
+    margin-right:10px;
+    margin-top:5px;
+    accent-color:#00ff88;
+  }
+
+  .terms label {
+    color:#ccc;
+    font-size:0.9em;
+    line-height:1.5;
+  }
+
+  .terms a {
+    color:#00ff88;
+    text-decoration:none;
+  }
+
+  .terms a:hover {
+    text-decoration:underline;
+  }
+
+  .submit-btn {
+    width:100%;
+    padding:16px;
+    background:linear-gradient(135deg, #00ff88, #00cc66);
+    color:#000;
+    border:none;
+    border-radius:12px;
+    font-size:1.1em;
+    font-weight:bold;
+    cursor:pointer;
+    transition:all 0.3s ease;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .submit-btn:hover {
+    transform:translateY(-3px);
+    box-shadow:0 10px 20px rgba(0,255,136,0.3);
+  }
+
+  .submit-btn:active {
+    transform:translateY(-1px);
+  }
+
+  .submit-btn:after {
+    content:'';
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:5px;
+    height:5px;
+    background:rgba(255,255,255,0.5);
+    opacity:0;
+    border-radius:100%;
+    transform:scale(1,1) translate(-50%);
+    transform-origin:50% 50%;
+  }
+
+  .submit-btn:focus:not(:active)::after {
+    animation:ripple 1s ease-out;
+  }
+
+  @keyframes ripple {
+    0% {
+      transform:scale(0,0);
+      opacity:0.5;
+    }
+    100% {
+      transform:scale(40,40);
+      opacity:0;
+    }
+  }
+
+  .login-link {
+    text-align:center;
+    margin-top:25px;
+    color:#aaa;
+    font-size:0.95em;
+  }
+
+  .login-link a {
+    color:#00ff88;
+    text-decoration:none;
+    font-weight:600;
+  }
+
+  .login-link a:hover {
+    text-decoration:underline;
+  }
+
+  .floating-element {
+    position:absolute;
+    width:20px;
+    height:20px;
+    background:rgba(0,255,136,0.2);
+    border-radius:50%;
+    animation:float 15s infinite linear;
+  }
+
+  @keyframes float {
+    0%, 100% { transform:translate(0,0); }
+    25% { transform:translate(20px,-20px); }
+    50% { transform:translate(0,-40px); }
+    75% { transform:translate(-20px,-20px); }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      flex-direction:column;
+      max-width:500px;
+    }
+    
+    .left-panel, .right-panel {
+      padding:30px;
+    }
+    
+    .left-panel {
+      order:2;
+    }
+    
+    .right-panel {
+      order:1;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <!-- Éléments flottants décoratifs -->
+  <div class="floating-element" style="top:10%; left:5%; animation-delay:0s;"></div>
+  <div class="floating-element" style="top:30%; right:10%; animation-delay:3s;"></div>
+  <div class="floating-element" style="bottom:20%; left:15%; animation-delay:6s;"></div>
+  <div class="floating-element" style="bottom:40%; right:5%; animation-delay:9s;"></div>
+
+  <!-- Panneau gauche (présentation) -->
+  <div class="left-panel">
+    <div class="logo">🚀</div>
+    
+    <div class="welcome-text">
+      <h2>Rejoins l'Aventure</h2>
+      <p>Crée ton compte et accède à du contenu exclusif, des fonctionnalités premium et une communauté active.</p>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">🔒</div>
+        <div class="feature-text">
+          <h3>Sécurité maximale</h3>
+          <p>Tes données sont cryptées et protégées</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-text">
+          <h3>Accès instantané</h3>
+          <p>Commence dès maintenant sans attente</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">🎁</div>
+        <div class="feature-text">
+          <h3>Avantages exclusifs</h3>
+          <p>Contenu premium et fonctionnalités avancées</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panneau droit (formulaire) -->
+  <div class="right-panel">
+    <div class="form-container">
+      <div class="form-header">
+        <h2>Créer un compte</h2>
+        <p>Remplis les informations ci-dessous pour commencer</p>
+      </div>
+
+      <form id="signupForm">
+        <div class="form-group">
+          <label class="form-label" for="username">Nom d'utilisateur</label>
+          <input type="text" id="username" class="form-input" placeholder="Choisis un pseudo cool" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Adresse email</label>
+          <input type="email" id="email" class="form-input" placeholder="ton@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Mot de passe</label>
+          <div class="password-container">
+            <input type="password" id="password" class="form-input" placeholder="Minimum 8 caractères" required>
+            <button type="button" class="toggle-password" id="togglePassword">👁️</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="confirmPassword">Confirmer le mot de passe</label>
+          <input type="password" id="confirmPassword" class="form-input" placeholder="Répète ton mot de passe" required>
+        </div>
+
+        <div class="terms">
+          <input type="checkbox" id="terms" required>
+          <label for="terms">
+            J'accepte les <a href="#">conditions d'utilisation</a> et la <a href="#">politique de confidentialité</a>
+          </label>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span id="btnText">Créer mon compte</span>
+        </button>
+
+        <div class="login-link">
+          Tu as déjà un compte ? <a href="login.html">Connecte-toi ici</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Fonction pour basculer la visibilité du mot de passe
+  document.getElementById('togglePassword').addEventListener('click', function() {
+    const passwordInput = document.getElementById('password');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    
+    // Changer l'icône
+    this.textContent = type === 'password' ? '👁️' : '🙈';
+  });
+
+  // Validation du formulaire
+  document.getElementById('signupForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const terms = document.getElementById('terms').checked;
+    
+    // Validation de base
+    if (username.length < 3) {
+      alert("Le nom d'utilisateur doit contenir au moins 3 caractères");
+      return;
+    }
+    
+    if (!isValidEmail(email)) {
+      alert("Veuillez entrer une adresse email valide");
+      return;
+    }
+    
+    if (password.length < 8) {
+      alert("Le mot de passe doit contenir au moins 8 caractères");
+      return;
+    }
+    
+    if (password !== confirmPassword) {
+      alert("Les mots de passe ne correspondent pas");
+      return;
+    }
+    
+    if (!terms) {
+      alert("Vous devez accepter les conditions d'utilisation");
+      return;
+    }
+    
+    // Simulation d'inscription réussie
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    
+    // Animation de chargement
+    submitBtn.disabled = true;
+    btnText.textContent = "Inscription en cours...";
+    submitBtn.style.background = "linear-gradient(135deg, #00cc66, #00aa44)";
+    
+    // Simuler un délai d'inscription
+    setTimeout(() => {
+      // Réussite de l'inscription
+      btnText.textContent = "✅ Inscription réussie !";
+      submitBtn.style.background = "linear-gradient(135deg, #00cc66, #008833)";
+      
+      // Redirection vers la page de bienvenue après 2 secondes
+      setTimeout(() => {
+        window.location.href = "bienvenue.html";
+      }, 2000);
+      
+    }, 1500);
+  });
+  
+  // Fonction de validation d'email
+  function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+  
+  // Animation d'entrée pour les champs
+  const inputs = document.querySelectorAll('.form-input');
+  inputs.forEach((input, index) => {
+    input.style.animationDelay = `${index * 0.1}s`;
+    input.style.animation = 'slideUp 0.5s ease forwards';
+    input.style.opacity = '0';
+  });
+  
+  // Après un court délai pour déclencher les animations
+  setTimeout(() => {
+    inputs.forEach(input => {
+      input.style.opacity = '1';
+    });
+  }, 300);
+</script>
+
+</body>
+</html>

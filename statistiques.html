@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stats A.R</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --green: #00ff88;
+      --green-dark: #00cc6a;
+      --bg-main: #070a08;
+      --bg-card: #0f1512;
+      --bg-glass: rgba(15, 21, 18, 0.75);
+      --border-soft: rgba(0,255,136,0.15);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+    }
+
+    body {
+      background: linear-gradient(180deg, #050806, var(--bg-main));
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* GLASS */
+    .glass-effect {
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-soft);
+    }
+
+    /* TEXT */
+    .gradient-text {
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* CARDS */
+    .stats-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      transition: all 0.25s ease;
+    }
+
+    .stats-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0,255,136,0.12);
+    }
+
+    /* BOUTONS */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      color: #000;
+      transition: all 0.25s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,255,136,0.35);
+    }
+
+    .btn-secondary {
+      background: rgba(0,255,136,0.12);
+      border: 1px solid var(--border-soft);
+      transition: all 0.25s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0,255,136,0.25);
+    }
+
+    /* PROGRESS BARS */
+    .progress-bar {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      height: 8px;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, var(--green) 0%, var(--green-dark) 100%);
+      height: 100%;
+      transition: width 1s ease-in-out;
+    }
+
+    /* ANIMATIONS */
+    .floating {
+      animation: floating 3s ease-in-out infinite;
+    }
+
+    @keyframes floating {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* TABLE STYLES */
+    table {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th {
+      background: var(--bg-card);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    td {
+      background: var(--bg-card);
+      transition: background 0.3s ease;
+    }
+
+    tr:hover td {
+      background: rgba(0, 255, 136, 0.05);
+    }
+
+    /* SUCCESS RATE BADGES */
+    .success-rate {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    /* EFFET MOUVEMENT TABLEAU DE BORD */
+    .dashboard-motion {
+      transition: transform 0.2s ease-out;
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      body {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      header,
+      main,
+      section,
+      .glass-effect {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      table {
+        min-width: 600px;
+      }
+
+      .overflow-x-auto {
+        padding-bottom: 10px;
+      }
+
+      .dashboard-motion {
+        animation: float-dashboard 3s ease-in-out infinite;
+      }
+    }
+
+    @keyframes float-dashboard {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* RESULT COLORS */
+    .result-gagne { color: #00ff88; }
+    .result-perdu { color: #ef4444; }
+    .result-rembourse { color: #f59e0b; }
+    .result-encours { color: #3b82f6; }
+  </style>
+</head>
+<body class="min-h-screen p-4">
+
+<!-- Header -->
+<header class="glass-effect dashboard-motion rounded-2xl p-6 mb-8 sticky top-4 z-50 shadow-xl">
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="flex items-center gap-4">
+      <div class="w-14 h-14 rounded-full bg-gradient-to-r from-green-500 to-indigo-600 flex items-center justify-center floating">
+        <i data-lucide="bar-chart-3" class="text-white w-7 h-7"></i>
+      </div>
+      <div>
+        <h1 class="text-3xl font-bold gradient-text">Stats Paris</h1>
+        <p class="text-gray-400">Analyse des performances</p>
+      </div>
+    </div>
+    
+    <button onclick="window.location.href='index.html'" 
+            class="btn-secondary px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all duration-300 hover:scale-105">
+      <i data-lucide="arrow-left" class="w-4 h-4"></i>
+      Retour
+    </button>
+  </div>
+</header>
+
+<!-- Statistiques Globales -->
+<section class="max-w-7xl mx-auto">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="stats-card p-6 rounded-2xl text-center">
+      <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="trophy" class="w-6 h-6 text-green-500"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-green-500" id="totalGagnes">0</h3>
+      <p class="text-gray-400 text-sm">Paris Gagnés</p>
+    </div>
+    
+    <div class="stats-card p-6 rounded-2xl text-center">
+      <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="x" class="w-6 h-6 text-red-500"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-red-500" id="totalPerdus">0</h3>
+      <p class="text-gray-400 text-sm">Paris Perdus</p>
+    </div>
+    
+    <div class="stats-card p-6 rounded-2xl text-center">
+      <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="hash" class="w-6 h-6 text-blue-500"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-blue-500" id="totalParis">0</h3>
+      <p class="text-gray-400 text-sm">Total Paris</p>
+    </div>
+    
+    <div class="stats-card p-6 rounded-2xl text-center">
+      <div class="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="target" class="w-6 h-6 text-orange-500"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-orange-500" id="tauxReussite">0%</h3>
+      <p class="text-gray-400 text-sm">Taux de Réussite</p>
+    </div>
+  </div>
+
+  <!-- Tableau des Statistiques par Option -->
+  <div class="glass-effect rounded-2xl p-6 mb-8">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-xl font-bold flex items-center gap-2 mb-2">
+          <i data-lucide="pie-chart" class="w-5 h-5 text-green-500"></i>
+          Statistiques par Option
+        </h2>
+        <p class="text-gray-400 text-sm">Performance détaillée pour chaque type de pari</p>
+      </div>
+      <div class="flex items-center gap-2 px-3 py-2 rounded-lg" style="background: rgba(0,255,136,0.1); border: 1px solid var(--border-soft);">
+        <i data-lucide="filter" class="w-4 h-4 text-green-400"></i>
+        <span class="text-sm text-gray-300" id="totalOptions">0 options</span>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-gray-700">
+            <th class="py-4 px-4 text-left">
+              <div class="flex items-center gap-2">
+                <i data-lucide="list" class="w-4 h-4"></i>
+                Option
+              </div>
+            </th>
+            <th class="py-4 px-4 text-center">
+              <div class="flex items-center gap-2 justify-center">
+                <i data-lucide="hash" class="w-4 h-4"></i>
+                Paris
+              </div>
+            </th>
+            <th class="py-4 px-4 text-center result-gagne">
+              <div class="flex items-center gap-2 justify-center">
+                <i data-lucide="check" class="w-4 h-4"></i>
+                Gagnés
+              </div>
+            </th>
+            <th class="py-4 px-4 text-center result-perdu">
+              <div class="flex items-center gap-2 justify-center">
+                <i data-lucide="x" class="w-4 h-4"></i>
+                Perdus
+              </div>
+            </th>
+            <th class="py-4 px-4 text-center">
+              <div class="flex items-center gap-2 justify-center">
+                <i data-lucide="percent" class="w-4 h-4"></i>
+                % Réussite
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="tableStatsOption" class="divide-y divide-gray-800"></tbody>
+      </table>
+    </div>
+
+    <!-- Légende -->
+    <div class="flex flex-wrap gap-4 mt-6 pt-6 border-t border-gray-800">
+      <div class="flex items-center gap-2">
+        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+        <span class="text-sm text-gray-400">≥ 70% - Excellente performance</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+        <span class="text-sm text-gray-400">40-69% - Performance moyenne</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+        <span class="text-sm text-gray-400">≤ 39% - À améliorer</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graphique de Performance -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <div class="glass-effect p-6 rounded-2xl">
+      <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+        <i data-lucide="activity" class="w-5 h-5 text-green-500"></i>
+        Distribution des Résultats
+      </h3>
+      <div class="space-y-4">
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="result-gagne">Paris Gagnés</span>
+            <span id="percentGagnes">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div id="progressGagnes" class="progress-fill" style="width: 0%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="result-perdu">Paris Perdus</span>
+            <span id="percentPerdus">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div id="progressPerdus" class="progress-fill bg-red-500" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-effect p-6 rounded-2xl">
+      <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+        <i data-lucide="award" class="w-5 h-5 text-green-500"></i>
+        Meilleure Performance
+      </h3>
+      <div id="bestOption" class="text-center py-4">
+        <div class="text-3xl font-bold gradient-text mb-2" id="bestOptionName">-</div>
+        <div class="text-2xl font-bold result-gagne" id="bestOptionRate">0%</div>
+        <p class="text-gray-400 text-sm mt-1">Taux de réussite le plus élevé</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Derniers Paris -->
+  <div class="glass-effect rounded-2xl p-6">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-xl font-bold flex items-center gap-2">
+        <i data-lucide="history" class="w-5 h-5 text-green-500"></i>
+        Derniers Paris
+      </h2>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-gray-700">
+            <th class="py-4 px-4 text-left">Type</th>
+            <th class="py-4 px-4 text-left">Match(s)</th>
+            <th class="py-4 px-4 text-center">Cote</th>
+            <th class="py-4 px-4 text-center">Mise</th>
+            <th class="py-4 px-4 text-center">Résultat</th>
+            <th class="py-4 px-4 text-center">Gain Potentiel</th>
+            <th class="py-4 px-4 text-center">Date</th>
+          </tr>
+        </thead>
+        <tbody id="tableDerniersParis" class="divide-y divide-gray-800"></tbody>
+      </table>
+      
+      <div id="emptyStateStats" class="text-center py-12 hidden">
+        <i data-lucide="bar-chart-3" class="w-16 h-16 text-gray-600 mx-auto mb-4"></i>
+        <h3 class="text-lg font-bold text-gray-400 mb-2">Aucun pari enregistré</h3>
+        <p class="text-gray-500">Commencez par ajouter votre premier pari sur la page principale !</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  lucide.createIcons();
+  
+  let paris = JSON.parse(localStorage.getItem("paris")) || [];
+
+  function calculerStatsGlobales() {
+    const totalParis = paris.length;
+    const totalGagnes = paris.filter(p => p.resultat === "Gagné").length;
+    const totalPerdus = paris.filter(p => p.resultat === "Perdu").length;
+    const tauxReussite = totalParis > 0 ? ((totalGagnes / totalParis) * 100).toFixed(1) : 0;
+
+    // Mettre à jour les cartes de statistiques globales
+    document.getElementById('totalParis').textContent = totalParis;
+    document.getElementById('totalGagnes').textContent = totalGagnes;
+    document.getElementById('totalPerdus').textContent = totalPerdus;
+    document.getElementById('tauxReussite').textContent = tauxReussite + '%';
+
+    // Mettre à jour les barres de progression
+    const percentGagnes = totalParis > 0 ? ((totalGagnes / totalParis) * 100).toFixed(1) : 0;
+    const percentPerdus = totalParis > 0 ? ((totalPerdus / totalParis) * 100).toFixed(1) : 0;
+    
+    document.getElementById('percentGagnes').textContent = percentGagnes + '%';
+    document.getElementById('percentPerdus').textContent = percentPerdus + '%';
+    
+    setTimeout(() => {
+      document.getElementById('progressGagnes').style.width = percentGagnes + '%';
+      document.getElementById('progressPerdus').style.width = percentPerdus + '%';
+    }, 100);
+  }
+
+  function afficherStatsOptions() {
+    const statsOptions = {};
+    let bestOption = { name: '', rate: 0 };
+
+    // Calculer les statistiques par option
+    paris.forEach(p => {
+      if (!statsOptions[p.option]) {
+        statsOptions[p.option] = { total: 0, gagne: 0, perdu: 0 };
+      }
+      statsOptions[p.option].total++;
+      if (p.resultat === "Gagné") statsOptions[p.option].gagne++;
+      else if (p.resultat === "Perdu") statsOptions[p.option].perdu++;
+    });
+
+    const tableBody = document.getElementById("tableStatsOption");
+    tableBody.innerHTML = "";
+
+    // Trier les options par taux de réussite (décroissant)
+    const optionsTriees = Object.entries(statsOptions).sort((a, b) => {
+      const tauxA = a[1].total > 0 ? (a[1].gagne / a[1].total) : 0;
+      const tauxB = b[1].total > 0 ? (b[1].gagne / b[1].total) : 0;
+      return tauxB - tauxA;
+    });
+
+    optionsTriees.forEach(([option, stats]) => {
+      const taux = stats.total > 0 ? ((stats.gagne / stats.total) * 100) : 0;
+      const tauxFormate = taux.toFixed(2) + "%";
+      
+      // Mettre à jour la meilleure option
+      if (taux > bestOption.rate && stats.total >= 3) {
+        bestOption = { name: option, rate: taux };
+      }
+
+      // Déterminer la couleur en fonction du taux de réussite
+      let tauxCouleur = 'text-gray-400';
+      let bgCouleur = 'bg-gray-800';
+      if (taux >= 70) {
+        tauxCouleur = 'text-green-500';
+        bgCouleur = 'bg-green-500/20';
+      } else if (taux >= 40) {
+        tauxCouleur = 'text-yellow-500';
+        bgCouleur = 'bg-yellow-500/20';
+      } else if (taux > 0) {
+        tauxCouleur = 'text-red-500';
+        bgCouleur = 'bg-red-500/20';
+      }
+
+      const tr = document.createElement("tr");
+      tr.className = "stats-card";
+      tr.innerHTML = `
+        <td class="py-4 px-4 font-medium">
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full ${taux >= 70 ? 'bg-green-500' : taux >= 40 ? 'bg-yellow-500' : 'bg-red-500'}"></div>
+            ${option}
+          </div>
+        </td>
+        <td class="py-4 px-4 text-center font-semibold">${stats.total}</td>
+        <td class="py-4 px-4 text-center font-bold result-gagne">${stats.gagne}</td>
+        <td class="py-4 px-4 text-center font-bold result-perdu">${stats.perdu}</td>
+        <td class="py-4 px-4 text-center">
+          <span class="success-rate ${bgCouleur} ${tauxCouleur}">
+            ${tauxFormate}
+          </span>
+        </td>
+      `;
+      tableBody.appendChild(tr);
+    });
+
+    // Mettre à jour la meilleure option
+    if (bestOption.name) {
+      document.getElementById('bestOptionName').textContent = bestOption.name;
+      document.getElementById('bestOptionRate').textContent = bestOption.rate.toFixed(1) + '%';
+    } else {
+      document.getElementById('bestOptionName').textContent = "Aucune donnée";
+      document.getElementById('bestOptionRate').textContent = "0%";
+    }
+
+    // Mettre à jour le compteur d'options
+    document.getElementById('totalOptions').textContent = `${optionsTriees.length} options`;
+  }
+
+  function afficherDerniersParis() {
+    const tableBody = document.getElementById("tableDerniersParis");
+    const emptyState = document.getElementById("emptyStateStats");
+    
+    if (paris.length === 0) {
+      emptyState.classList.remove("hidden");
+      tableBody.innerHTML = "";
+      return;
+    }
+    
+    emptyState.classList.add("hidden");
+    tableBody.innerHTML = "";
+
+    // Trier les paris par date (les plus récents d'abord)
+    const derniersParis = [...paris].reverse().slice(0, 5); // Limiter à 5 derniers
+
+    derniersParis.forEach((p, index) => {
+      const gainPotentiel = (p.mise * p.cote).toFixed(2);
+      let resultatClass = "";
+      let resultatIcon = "";
+      let typeIcon = p.type === 'combiné' ? 'layers' : 'star';
+      let typeColor = p.type === 'combiné' ? 'text-blue-500' : 'text-green-500';
+      
+      switch(p.resultat) {
+        case "Gagné":
+          resultatClass = "result-gagne";
+          resultatIcon = "check-circle";
+          break;
+        case "Perdu":
+          resultatClass = "result-perdu";
+          resultatIcon = "x-circle";
+          break;
+        case "Rembourser":
+          resultatClass = "result-rembourse";
+          resultatIcon = "refresh-cw";
+          break;
+        case "En cours":
+          resultatClass = "result-encours";
+          resultatIcon = "clock";
+          break;
+      }
+
+      const tr = document.createElement("tr");
+      tr.className = "stats-card";
+
+      if (p.type === 'combiné') {
+        // Affichage pour les paris combinés
+        tr.innerHTML = `
+          <td class="py-4 px-4">
+            <div class="flex items-center gap-2 ${typeColor}">
+              <i data-lucide="${typeIcon}" class="w-4 h-4"></i>
+              <span class="font-bold">Combiné</span>
+            </div>
+          </td>
+          <td class="py-4 px-4">
+            <div class="space-y-1">
+              ${p.matches.map(match => `
+                <div class="text-sm">
+                  <span class="font-medium">${match.match}</span>
+                  <span class="text-gray-400 ml-2">${match.option}</span>
+                </div>
+              `).join('')}
+            </div>
+          </td>
+          <td class="py-4 px-4 text-center font-bold">${p.cote}</td>
+          <td class="py-4 px-4 text-center">${parseFloat(p.mise).toFixed(2)} f</td>
+          <td class="py-4 px-4 text-center">
+            <div class="flex items-center justify-center gap-1 ${resultatClass} font-bold">
+              <i data-lucide="${resultatIcon}" class="w-4 h-4"></i>
+              ${p.resultat}
+            </div>
+          </td>
+          <td class="py-4 px-4 text-center font-bold ${resultatClass}">
+            ${gainPotentiel} f
+          </td>
+          <td class="py-4 px-4 text-center text-sm">${p.date}</td>
+        `;
+      } else {
+        // Affichage pour les paris simples
+        tr.innerHTML = `
+          <td class="py-4 px-4">
+            <div class="flex items-center gap-2 ${typeColor}">
+              <i data-lucide="${typeIcon}" class="w-4 h-4"></i>
+              <span class="font-bold">Simple</span>
+            </div>
+          </td>
+          <td class="py-4 px-4">
+            <div class="font-medium">${p.match}</div>
+            <div class="text-xs text-gray-400">${p.option}</div>
+          </td>
+          <td class="py-4 px-4 text-center font-bold">${p.cote}</td>
+          <td class="py-4 px-4 text-center">${parseFloat(p.mise).toFixed(2)} f</td>
+          <td class="py-4 px-4 text-center">
+            <div class="flex items-center justify-center gap-1 ${resultatClass} font-bold">
+              <i data-lucide="${resultatIcon}" class="w-4 h-4"></i>
+              ${p.resultat}
+            </div>
+          </td>
+          <td class="py-4 px-4 text-center font-bold ${resultatClass}">
+            ${gainPotentiel} f
+          </td>
+          <td class="py-4 px-4 text-center text-sm">${p.date}</td>
+        `;
+      }
+      
+      tableBody.appendChild(tr);
+    });
+
+    lucide.createIcons();
+  }
+
+  function chargerDonnees() {
+    // Recharger les paris depuis localStorage
+    paris = JSON.parse(localStorage.getItem("paris")) || [];
+    
+    // Calculer et afficher les statistiques
+    calculerStatsGlobales();
+    afficherStatsOptions();
+    afficherDerniersParis();
+    
+    // Mettre à jour les icônes
+    lucide.createIcons();
+  }
+
+  // Initialiser l'affichage
+  chargerDonnees();
+
+  // Rafraîchir les statistiques si les données changent
+  window.addEventListener('storage', function() {
+    chargerDonnees();
+  });
+
+  // Rafraîchir périodiquement (toutes les 5 secondes)
+  setInterval(chargerDonnees, 5000);
+</script>
+
+</body>
+</html>

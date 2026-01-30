@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bientôt Disponible | Lancement Prochain</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-bg: #0a0a0f;
+            --darker-bg: #050508;
+            --card-bg: rgba(15, 15, 25, 0.85);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #8a5cf5;
+            --primary-dark: #6d3fd8;
+            --secondary: #00d4ff;
+            --accent: #ff5e7d;
+            --text: #e0e0f0;
+            --text-light: #a0a0c0;
+            --text-lighter: #7a7a9a;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --glow: rgba(138, 92, 245, 0.15);
+            --success: #00e0a0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(138, 92, 245, 0.08) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 212, 255, 0.05) 0%, transparent 40%),
+                linear-gradient(135deg, var(--dark-bg) 0%, var(--darker-bg) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(138, 92, 245, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 212, 255, 0.02) 0%, transparent 50%);
+            z-index: 0;
+        }
+        
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 1000;
+            background: rgba(20, 20, 30, 0.9);
+            color: var(--text-light);
+            border: 1px solid var(--card-border);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            transition: all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-button:hover {
+            transform: translateX(-5px);
+            color: var(--primary);
+            border-color: rgba(138, 92, 245, 0.3);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.6),
+                0 0 20px var(--glow);
+        }
+        
+        .back-button:active {
+            transform: translateX(-5px) scale(0.95);
+        }
+        
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            text-align: center;
+            padding: 60px 40px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(135deg, 
+                    transparent 0%, 
+                    rgba(138, 92, 245, 0.03) 50%, 
+                    transparent 100%);
+            z-index: -1;
+        }
+        
+        .header {
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.8rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+            color: var(--text);
+            text-transform: none;
+            letter-spacing: -0.5px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+            border-radius: 2px;
+        }
+        
+        .icon-container {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            box-shadow: 
+                0 10px 30px rgba(138, 92, 245, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .icon-container i {
+            font-size: 2.5rem;
+            color: white;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            font-weight: 400;
+            line-height: 1.6;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .highlight {
+            color: var(--text);
+            font-weight: 600;
+            position: relative;
+        }
+        
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(138, 92, 245, 0.3);
+            z-index: -1;
+        }
+        
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin: 60px 0;
+            perspective: 1000px;
+        }
+        
+        .countdown-box {
+            background: linear-gradient(145deg, rgba(25, 25, 40, 0.9), rgba(20, 20, 35, 0.9));
+            border-radius: 20px;
+            padding: 35px 25px;
+            min-width: 150px;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 0 0 1px rgba(255, 255, 255, 0.03);
+            transition: all 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .countdown-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(138, 92, 245, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.8s;
+            z-index: -1;
+        }
+        
+        .countdown-box:hover {
+            transform: translateY(-12px);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.7),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 0 1px rgba(138, 92, 245, 0.1),
+                0 0 30px rgba(138, 92, 245, 0.2);
+        }
+        
+        .countdown-box:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .countdown-value {
+            font-size: 3.8rem;
+            font-weight: 800;
+            display: block;
+            background: linear-gradient(135deg, var(--text), var(--text-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+            font-family: 'Inter', sans-serif;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .countdown-label {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 15px;
+            color: var(--text-lighter);
+            font-weight: 600;
+        }
+        
+        .progress-container {
+            margin: 50px 0 60px;
+            text-align: left;
+            background: rgba(20, 20, 35, 0.6);
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 
+                inset 0 2px 10px rgba(0, 0, 0, 0.3),
+                0 5px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 78%;
+            border-radius: 10px;
+            transition: width 2s cubic-bezier(0.22, 0.61, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(138, 92, 245, 0.3);
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .notify-section {
+            margin: 50px 0;
+            position: relative;
+        }
+        
+        .notify-form {
+            background: rgba(20, 20, 35, 0.6);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .form-title {
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        .form-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .email-input {
+            padding: 18px 25px;
+            flex: 1;
+            min-width: 250px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(10, 10, 20, 0.8);
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .email-input:focus {
+            border-color: rgba(138, 92, 245, 0.5);
+            background: rgba(15, 15, 25, 0.9);
+            box-shadow: 
+                inset 0 2px 10px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(138, 92, 245, 0.2);
+        }
+        
+        .email-input::placeholder {
+            color: var(--text-lighter);
+        }
+        
+        .notify-btn {
+            padding: 18px 35px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 10px 25px rgba(138, 92, 245, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notify-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 35px rgba(138, 92, 245, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+        }
+        
+        .notify-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .social-section {
+            margin-top: 50px;
+        }
+        
+        .social-title {
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .social-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            background: rgba(25, 25, 40, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+            box-shadow: 
+                0 10px 25px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            color: var(--primary);
+            border-color: rgba(138, 92, 245, 0.2);
+        }
+        
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(138, 92, 245, 0.05) 0%, transparent 70%);
+            animation: floatElement 30s infinite linear;
+        }
+        
+        @keyframes floatElement {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .message {
+            margin-top: 20px;
+            padding: 18px 25px;
+            border-radius: 14px;
+            background: rgba(20, 20, 35, 0.9);
+            display: none;
+            font-weight: 500;
+            color: var(--text);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeIn 0.5s ease;
+            text-align: left;
+            backdrop-filter: blur(10px);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .footer {
+            margin-top: 60px;
+            color: var(--text-lighter);
+            font-size: 0.9rem;
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+        }
+        
+        .copyright {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .heart {
+            color: var(--accent);
+            animation: heartbeat 2s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 3.2rem;
+            }
+            
+            .countdown-box {
+                min-width: 130px;
+                padding: 30px 20px;
+            }
+            
+            .countdown-value {
+                font-size: 3.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 25px;
+            }
+            
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .countdown-box {
+                min-width: 110px;
+                padding: 25px 15px;
+            }
+            
+            .countdown-value {
+                font-size: 2.8rem;
+            }
+            
+            .countdown-label {
+                font-size: 0.9rem;
+            }
+            
+            .notify-form {
+                padding: 30px;
+            }
+            
+            .form-group {
+                flex-direction: column;
+            }
+            
+            .email-input {
+                width: 100%;
+            }
+            
+            .notify-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .back-button {
+                top: 20px;
+                left: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.3rem;
+            }
+            
+            .container {
+                padding: 30px 20px;
+                border-radius: 20px;
+            }
+            
+            .countdown-box {
+                min-width: 85px;
+                padding: 20px 10px;
+            }
+            
+            .countdown-value {
+                font-size: 2.3rem;
+            }
+            
+            .countdown-label {
+                font-size: 0.8rem;
+            }
+            
+            .icon-container {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .icon-container i {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Animation d'entrée */
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(40px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .animate-in {
+            opacity: 0;
+            animation: slideUp 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+
+<body>
+    <button class="back-button animate-in" id="backButton" title="Retour">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <script>
+    
+    document.getElementById("backButton").addEventListener("click", () => {
+    window.location.href = "index.html";
+  });
+</script>
+    
+    <div class="floating-elements" id="floatingElements"></div>
+    
+    <div class="container">
+        <div class="header animate-in">
+            <div class="icon-container">
+                <i class="fas fa-hourglass-half"></i>
+            </div>
+            <h1>Bientôt Disponible</h1>
+            <p class="subtitle delay-1">Nous préparons quelque chose d'<span class="highlight">exceptionnel</span>. Un lancement qui changera votre expérience. Restez à l'écoute.</p>
+        </div>
+        
+        <div class="countdown-container">
+            <div class="countdown-box animate-in delay-1">
+                <span class="countdown-value" id="days">00</span>
+                <span class="countdown-label">Jours</span>
+            </div>
+            <div class="countdown-box animate-in delay-2">
+                <span class="countdown-value" id="hours">00</span>
+                <span class="countdown-label">Heures</span>
+            </div>
+            <div class="countdown-box animate-in delay-3">
+                <span class="countdown-value" id="minutes">00</span>
+                <span class="countdown-label">Minutes</span>
+            </div>
+            <div class="countdown-box animate-in delay-4">
+                <span class="countdown-value" id="seconds">00</span>
+                <span class="countdown-label">Secondes</span>
+            </div>
+        </div>
+        
+        <div class="progress-container animate-in delay-2">
+            <div class="progress-label">
+                <span>Progression du développement</span>
+                <span id="progressPercent">78%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <div class="notify-section animate-in delay-3">
+            <div class="notify-form">
+                <p class="form-title">Soyez averti du lancement</p>
+                <form id="notifyForm">
+                    <div class="form-group">
+                        <input type="email" class="email-input" placeholder="votre.email@exemple.com" required>
+                        <button type="submit" class="notify-btn">
+                            <i class="fas fa-bell"></i> Me notifier
+                        </button>
+                    </div>
+                </form>
+                <div class="message" id="formMessage"></div>
+            </div>
+        </div>
+        
+        <div class="social-section animate-in delay-4">
+            <p class="social-title">Suivez notre progression</p>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+        
+        <div class="footer animate-in delay-5">
+            <div class="copyright">
+                <span>&copy; 2026 - Tous droits réservés</span>
+                <span class="heart"><i class="fas fa-heart"></i></span>
+                <span>Conçu avec soin</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Date de lancement (dans 40 jours)
+        const launchDate = new Date();
+        launchDate.setDate(launchDate.getDate() + 40);
+        launchDate.setHours(18, 0, 0, 0);
+        
+        // Éléments du compte à rebours
+        const daysElement = document.getElementById('days');
+        const hoursElement = document.getElementById('hours');
+        const minutesElement = document.getElementById('minutes');
+        const secondsElement = document.getElementById('seconds');
+        
+        // Éléments de la barre de progression
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+        
+        // Bouton retour
+        const backButton = document.getElementById('backButton');
+        
+        // Fonction pour le bouton retour
+        backButton.addEventListener('click', function() {
+            // Animation de sortie
+            const container = document.querySelector('.container');
+            container.style.animation = 'slideUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) reverse forwards';
+            
+            // Animation du bouton
+            this.style.transform = 'translateX(-10px) scale(0.95)';
+            
+            // Simuler le retour
+            setTimeout(() => {
+                // Dans un vrai site, on utiliserait: window.history.back();
+                showMessage('Retour en arrière effectué. Dans un environnement réel, vous seriez redirigé vers la page précédente.', 'info');
+                
+                // Réafficher après 2 secondes pour la démo
+                setTimeout(() => {
+                    container.style.animation = 'slideUp 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards';
+                    this.style.transform = 'translateX(0) scale(1)';
+                }, 2000);
+            }, 600);
+        });
+        
+        // Fonction pour mettre à jour le compte à rebours
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = launchDate.getTime() - now;
+            
+            if (distance < 0) {
+                // Le compte à rebours est terminé
+                daysElement.textContent = '00';
+                hoursElement.textContent = '00';
+                minutesElement.textContent = '00';
+                secondsElement.textContent = '00';
+                
+                // Modifier le titre
+                document.querySelector('h1').innerHTML = 'Disponible Maintenant';
+                document.querySelector('.icon-container i').className = 'fas fa-check-circle';
+                document.querySelector('.subtitle').innerHTML = 'Notre projet est maintenant disponible ! <span class="highlight">Découvrez-le dès maintenant.</span>';
+                
+                // Animation de célébration
+                document.querySelectorAll('.countdown-box').forEach(box => {
+                    box.style.background = 'linear-gradient(145deg, rgba(0, 224, 160, 0.15), rgba(20, 20, 35, 0.9))';
+                    box.style.boxShadow = '0 15px 35px rgba(0, 224, 160, 0.3)';
+                    box.querySelector('.countdown-value').style.background = 'linear-gradient(135deg, var(--success), #00ffcc)';
+                    box.querySelector('.countdown-value').style.webkitBackgroundClip = 'text';
+                    box.querySelector('.countdown-label').style.color = 'var(--success)';
+                });
+                
+                return;
+            }
+            
+            // Calculer les jours, heures, minutes, secondes
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            // Mettre à jour avec animation
+            updateWithAnimation(daysElement, days);
+            updateWithAnimation(hoursElement, hours);
+            updateWithAnimation(minutesElement, minutes);
+            updateWithAnimation(secondsElement, seconds);
+            
+            // Mettre à jour la barre de progression
+            const totalDays = 40;
+            const daysPassed = totalDays - days;
+            const progress = Math.min(100, Math.floor((daysPassed / totalDays) * 100));
+            
+            progressFill.style.width = `${progress}%`;
+            progressPercent.textContent = `${progress}%`;
+            
+            // Animation subtile des boîtes
+            if (seconds % 10 === 0) {
+                document.querySelectorAll('.countdown-box').forEach((box, index) => {
+                    setTimeout(() => {
+                        box.style.transform = `translateY(${index % 2 === 0 ? '-8px' : '-12px'})`;
+                        setTimeout(() => {
+                            box.style.transform = 'translateY(0)';
+                        }, 500);
+                    }, index * 100);
+                });
+            }
+        }
+        
+        // Fonction pour mettre à jour avec animation
+        function updateWithAnimation(element, newValue) {
+            const currentValue = parseInt(element.textContent);
+            if (currentValue !== newValue) {
+                element.style.transform = 'scale(1.2)';
+                element.style.opacity = '0.5';
+                
+                setTimeout(() => {
+                    element.textContent = newValue < 10 ? '0' + newValue : newValue;
+                    element.style.transform = 'scale(1)';
+                    element.style.opacity = '1';
+                }, 150);
+            }
+        }
+        
+        // Mettre à jour le compte à rebours toutes les secondes
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        
+        // Générer des éléments flottants subtils
+        const floatingElements = document.getElementById('floatingElements');
+        
+        for (let i = 0; i < 15; i++) {
+            const element = document.createElement('div');
+            element.classList.add('floating-element');
+            
+            // Taille aléatoire
+            const size = Math.random() * 120 + 40;
+            element.style.width = `${size}px`;
+            element.style.height = `${size}px`;
+            
+            // Position aléatoire
+            element.style.left = `${Math.random() * 100}%`;
+            
+            // Animation avec délai et durée aléatoires
+            element.style.animationDelay = `${Math.random() * 20}s`;
+            element.style.animationDuration = `${20 + Math.random() * 30}s`;
+ 
+            // Forme parfois différente
+            if (Math.random() > 0.7) {
+                element.style.borderRadius = '10%';
+                element.style.background = 'radial-gradient(circle, rgba(0, 212, 255, 0.03) 0%, transparent 70%)';
+            }
+            
+            floatingElements.appendChild(element);
+        }
+        
+        // Gestion du formulaire
+        const notifyForm = document.getElementById('notifyForm');
+        const formMessage = document.getElementById('formMessage');
+        
+        notifyForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const emailInput = this.querySelector('.email-input');
+            const email = emailInput.value;
+            
+            // Validation
+            if (!email || !email.includes('@') || !email.includes('.')) {
+                showMessage('Veuillez entrer une adresse email valide.', 'error');
+                emailInput.focus();
+                return;
+            }
+            
+            // Animation de soumission
+            const submitBtn = this.querySelector('.notify-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...';
+            submitBtn.disabled = true;
+            
+            // Simulation d'envoi
+            setTimeout(() => {
+                showMessage(`Merci ! Vous serez notifié à ${email} dès que nous serons lancés.`, 'success');
+                
+                // Réinitialiser
+                emailInput.value = '';
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                // Effet de confirmation
+                submitBtn.style.background = 'linear-gradient(135deg, var(--success), #00e0a0)';
+                setTimeout(() => {
+                    submitBtn.style.background = 'linear-gradient(135deg, var(--primary), var(--primary-dark))';
+                }, 2000);
+                
+                // Enregistrer dans le localStorage
+                let subscribers = JSON.parse(localStorage.getItem('subscribers')) || [];
+                subscribers.push({email: email, date: new Date().toISOString()});
+                localStorage.setItem('subscribers', JSON.stringify(subscribers));
+            }, 1800);
+        });
+        
+        function showMessage(text, type) {
+            formMessage.textContent = text;
+            formMessage.style.display = 'block';
+            
+            // Style selon le type
+            if (type === 'success') {
+                formMessage.style.borderLeft = '4px solid var(--success)';
+                formMessage.style.background = 'rgba(0, 224, 160, 0.1)';
+            } else if (type === 'error') {
+                formMessage.style.borderLeft = '4px solid var(--accent)';
+                formMessage.style.background = 'rgba(255, 94, 125, 0.1)';
+            } else if (type === 'info') {
+                formMessage.style.borderLeft = '4px solid var(--secondary)';
+                formMessage.style.background = 'rgba(0, 212, 255, 0.1)';
+            }
+            
+            // Masquer après 5 secondes
+            setTimeout(() => {
+                formMessage.style.animation = 'fadeIn 0.5s ease reverse forwards';
+                setTimeout(() => {
+                    formMessage.style.display = 'none';
+                    formMessage.style.animation = 'fadeIn 0.5s ease';
+                }, 500);
+            }, 5000);
+        }
+        
+        // Effet de parallaxe subtil
+        document.addEventListener('mousemove', function(e) {
+            const x = (e.clientX * 0.3) / 100;
+            const y = (e.clientY * 0.3) / 100;
+            
+            document.querySelector('.floating-elements').style.transform = `translate(${x}px, ${y}px)`;
+        });
+        
+        // Initialisation des animations d'entrée
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animation du bouton retour
+            setTimeout(() => {
+                backButton.style.transition = 'all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)';
+                backButton.style.opacity = '1';
+                backButton.style.transform = 'translateX(0)';
+            }, 800);
+        });
+    </script>
+</body>
+</html>

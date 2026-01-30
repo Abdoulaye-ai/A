@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paris A.R</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+:root {
+  --green: #00ff88;
+  --green-dark: #00cc6a;
+  --bg-main: #070a08;
+  --bg-card: #0f1512;
+  --bg-glass: rgba(15, 21, 18, 0.75);
+  --border-soft: rgba(0,255,136,0.15);
+  --text-main: #e5e7eb;
+  --text-muted: #9ca3af;
+}
+
+body {
+  background: linear-gradient(180deg, #050806, var(--bg-main));
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* GLASS */
+.glass-effect {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-soft);
+}
+
+/* TEXT */
+.gradient-text {
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* CARDS */
+.stats-card,
+.transaction-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  transition: all 0.25s ease;
+}
+
+.stats-card:hover,
+.transaction-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0,255,136,0.12);
+}
+
+/* BOUTONS */
+.btn-primary {
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+  color: #000;
+  transition: all 0.25s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,255,136,0.35);
+}
+
+.btn-secondary {
+  background: rgba(0,255,136,0.12);
+  border: 1px solid var(--border-soft);
+  transition: all 0.25s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(0,255,136,0.25);
+}
+
+/* INPUTS */
+input,
+select {
+  background: rgba(8,12,10,0.8) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: var(--text-main);
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--green) !important;
+  box-shadow: 0 0 0 3px rgba(0,255,136,0.2);
+}
+
+/* RESULTATS */
+.result-gagne { border-left: 4px solid #00ff88; }
+.result-perdu { border-left: 4px solid #ef4444; }
+.result-rembourse { border-left: 4px solid #f59e0b; }
+.result-encours { border-left: 4px solid #3b82f6; }
+
+/* ACTION BUTTONS */
+.action-btn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  transform: scale(1.05);
+}
+
+.btn-gagne { background: #00ff88; color: #000; }
+.btn-perdu { background: #ef4444; color: #fff; }
+.btn-rembourse { background:#f59e0b; color: #000; }
+
+/* MOBILE */
+@media (max-width: 640px) {
+  header {
+    padding: 16px !important;
+  }
+
+  h1 {
+    font-size: 1.4rem !important;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  .stats-card {
+    padding: 16px;
+  }
+}
+  /* FIX MOBILE BORDS COLLÉS */
+@media (max-width: 768px) {
+  body {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  header,
+  main,
+  section,
+  .glass-effect {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  table {
+    min-width: 600px;
+  }
+
+  .overflow-x-auto {
+    padding-bottom: 10px;
+  }
+}
+  @media (max-width: 768px) {
+  header {
+    border-radius: 18px;
+  }
+}
+  /* EFFET MOUVEMENT TABLEAU DE BORD */
+.dashboard-motion {
+  transition: transform 0.2s ease-out;
+}
+
+/* Effet scroll naturel */
+@media (max-width: 768px) {
+  body {
+    scroll-behavior: smooth;
+  }
+
+  .dashboard-motion {
+    animation: float-dashboard 3s ease-in-out infinite;
+  }
+}
+
+@keyframes float-dashboard {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+  100% { transform: translateY(0); }
+}
+</style>
+</head>
+<body class="min-h-screen p-4">
+
+<!-- Header -->
+<header class="glass-effect dashboard-motion rounded-2xl p-6 mb-8 sticky top-4 z-50 shadow-xl">
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="flex items-center gap-4">
+      <div class="w-14 h-14 rounded-full bg-gradient-to-r from-green-500 to-indigo-600 flex items-center justify-center floating">
+        <i data-lucide="trophy" class="text-white w-7 h-7"></i>
+      </div>
+      <div>
+        <h1 class="text-3xl font-bold gradient-text">Paris A.R</h1>
+        <p class="text-gray-400">Gestion de vos paris</p>
+      </div>
+    </div>
+    
+    <div id="soldeCard" class="stats-card px-6 py-4 rounded-xl flex items-center gap-3 cursor-pointer group min-w-[200px]">
+      <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+        <i data-lucide="dollar-sign" class="w-5 h-5 text-green-400"></i>
+      </div>
+      <div>
+        <p class="text-gray-400 text-sm">Solde actuel</p>
+        <p id="solde" class="text-xl font-bold text-green-400">0 f</p>
+      </div>
+      <i data-lucide="plus" class="w-4 h-4 text-gray-500 ml-auto group-hover:text-green-400 transition-colors"></i>
+    </div>
+  </div>
+</header>
+
+<!-- Cartes de Statistiques -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+  <div class="stats-card p-6 rounded-2xl text-center">
+    <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-3">
+      <i data-lucide="hash" class="w-6 h-6 text-blue-500"></i>
+    </div>
+    <h3 class="text-2xl font-bold text-blue-500" id="statNombre">0</h3>
+    <p class="text-gray-400 text-sm">Total Paris</p>
+  </div>
+  
+  <div class="stats-card p-6 rounded-2xl text-center">
+    <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-3">
+      <i data-lucide="coins" class="w-6 h-6 text-purple-500"></i>
+    </div>
+    <h3 class="text-2xl font-bold text-purple-500" id="statMise">0 f</h3>
+    <p class="text-gray-400 text-sm">Total Misé</p>
+  </div>
+  
+  <div class="stats-card p-6 rounded-2xl text-center">
+    <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-3">
+      <i data-lucide="trending-up" class="w-6 h-6 text-green-500"></i>
+    </div>
+    <h3 class="text-2xl font-bold text-green-500" id="statGains">0 f</h3>
+    <p class="text-gray-400 text-sm">Gains Nets</p>
+  </div>
+  
+  <div class="stats-card p-6 rounded-2xl text-center">
+    <div class="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-3">
+      <i data-lucide="target" class="w-6 h-6 text-orange-500"></i>
+    </div>
+    <h3 class="text-2xl font-bold text-orange-500" id="statReussite">0%</h3>
+    <p class="text-gray-400 text-sm">Taux Réussite</p>
+  </div>
+</div>
+
+<main class="max-w-7xl mx-auto">
+  <!-- Onglets -->
+  <div class="glass-effect rounded-2xl p-4 mb-6">
+    <div class="flex space-x-4">
+      <button id="tabSimple" class="px-4 py-2 rounded-xl font-bold bg-green-500 text-white transition-colors">
+        <i data-lucide="star" class="w-4 h-4 inline mr-2"></i>
+        Paris Simple
+      </button>
+      <button id="tabCombine" class="px-4 py-2 rounded-xl font-bold glass-effect text-gray-300 hover:text-white transition-colors">
+        <i data-lucide="layers" class="w-4 h-4 inline mr-2"></i>
+        Paris Combiné
+      </button>
+    </div>
+  </div>
+
+  <!-- Formulaire Paris Simple -->
+  <section id="formSimple" class="glass-effect rounded-2xl p-6 mb-8">
+    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+      <i data-lucide="plus-circle" class="w-5 h-5 text-green-500"></i>
+      Nouveau Pari Simple
+    </h2>
+    
+    <form id="pariForm" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-300">Match</label>
+        <input type="text" id="match" placeholder="Ex: PSG vs Marseille" required 
+               class="w-full border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-green-500 bg-gray-800/50">
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-300">Cote</label>
+        <input type="number" step="0.01" id="cote" placeholder="1.50" required min="1.01"
+               class="w-full border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-green-500 bg-gray-800/50">
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-300">Mise (f)</label>
+        <input type="number" step="0.01" id="mise" placeholder="100.00" required min="0.01"
+               class="w-full border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-green-500 bg-gray-800/50">
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-300">Option</label>
+        <select id="option" required class="w-full border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-green-500 bg-gray-800/50">
+          <optgroup label="Résultat Match">
+            <option value="V1">V1</option>
+            <option value="X">X</option>
+            <option value="V2">V2</option>
+            <option value="1X">1X</option>
+            <option value="12">12</option>
+            <option value="2X">2X</option>
+            <optgroup label="les deux marque"></optgroup>
+             <option value="oui">Oui</option>
+            <option value="non">non</option>
+          </optgroup>
+          <optgroup label="Total Buts">
+            <option value="Total Over 0.5">Over 0.5</option>
+            <option value="Total Under 0.5">Under 0.5</option>
+             <option value="Total over 1">over 1</option>
+              <option value="Total Under 1">Under 1</option>
+            <option value="Total Over 1.5">Over 1.5</option>
+            <option value="Total Under 1.5">Under 1.5</option>
+            <option value="Total over 2">over 2</option>
+             <option value="Total Under 2">Under 2</option>
+            <option value="Total Over 2.5">Over 2.5</option>
+            <option value="Total under 2.5">Under 2.5</option>
+            <option value="Total over 3">over 3</option>
+            <option value="Total Under 3">Under 3</option>
+            <option value="Total Over 3.5">Over 3.5</option>
+            <option value="Total Under 3.5">Under 3.5</option>
+          </optgroup>
+          <optgroup label="BTTS">
+            <option value="BTTS Oui">BTTS Oui</option>
+            <option value="BTTS Non">BTTS Non</option>
+          </optgroup>
+          <optgroup label="Corners">
+            <option value="Corner Over 8.5">Corner Over 8.5</option>
+            <option value="Corner Under 8.5">Corner Under 8.5</option>
+            <option value="Corner Over 9.5">Corner Over 9.5</option>
+            <option value="Corner Under 9.5">Corner Under 9.5</option>
+          </optgroup>
+          <optgroup label="Cartons">
+            <option value="Carton Jaune Over 3.5">Carton Jaune Over 3.5</option>
+            <option value="Carton Jaune Under 3.5">Carton Jaune Under 3.5</option>
+            <option value="Carton Rouge Oui">Carton Rouge Oui</option>
+            <option value="Carton Rouge Non">Carton Rouge Non</option>
+            <option value="chaque equipes aura plus de 1 carton">chaque equipes aura plus de 1 carton</option>
+          </optgroup>
+          <optgroup label="handicap"></optgroup>
+          <option value="handicap 1 (-3.5)">handicap 1 (-3.5)</option>
+            <option value="handicap 2 (+3.5)">handicap 2 (+3.5) </option>
+            <option value="handicap 1 (3)">handicap 1 (-3) </option>
+            <option value="handicap 2(3) ">handicap 2(+3) </option>
+            <option value="handicap 1(-2.5) ">handicap 1(-2.5) </option>
+            <option value="handicap 2(+2.5)">handicap 2(+2.5)</option>
+            <option value="handicap 1(-2)">handicap 1(-2) </option>
+            <option value="handicap 2(+2)">handicap 2(+2) </option>
+            <option value="handicap 1(-1.5) ">handicap 1(-1.5) </option>
+            <option value="handicap 2(+1.5) ">handicap 2(+1.5) </option>
+        </select>
+      </div>
+      
+      <button type="submit" class="btn-primary text-white rounded-xl px-6 py-3 font-bold flex items-center justify-center gap-2 md:col-span-5">
+        <i data-lucide="plus" class="w-4 h-4"></i>
+         PARIER
+      </button>
+    </form>
+  </section>
+
+  <!-- Formulaire Paris Combiné -->
+  <section id="formCombine" class="glass-effect rounded-2xl p-6 mb-8 hidden">
+    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+      <i data-lucide="layers" class="w-5 h-5 text-blue-500"></i>
+      PARIER
+    </h2>
+    
+    <form id="pariCombineForm">
+      <div id="matchesContainer">
+        <!-- Les matchs seront ajoutés dynamiquement ici -->
+      </div>
+      
+      <div class="flex gap-3 mb-6">
+        <button type="button" id="addMatch" class="glass-effect text-white px-4 py-2 rounded-xl font-bold flex items-center gap-2 border border-gray-700 hover:border-green-500 transition-colors">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          Ajouter un Match
+        </button>
+        <button type="button" id="removeMatch" class="glass-effect text-white px-4 py-2 rounded-xl font-bold flex items-center gap-2 border border-gray-700 hover:border-red-500 transition-colors">
+          <i data-lucide="minus" class="w-4 h-4"></i>
+          Retirer un Match
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div>
+          <label class="block text-sm font-medium mb-2 text-gray-300">Mise Totale (f)</label>
+          <input type="number" step="0.01" id="miseCombine" placeholder="100.00" required min="0.01"
+                 class="w-full border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-green-500 bg-gray-800/50">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium mb-2 text-gray-300">Cote Totale</label>
+          <div id="coteTotale" class="cote-totale">1.00</div>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium mb-2 text-gray-300">Gain Potentiel</label>
+          <div id="gainPotentiel" class="cote-totale bg-purple-500">0.00 f</div>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn-primary text-white rounded-xl px-6 py-3 font-bold flex items-center justify-center gap-2 w-full mt-6">
+        <i data-lucide="layers" class="w-4 h-4"></i>
+        PARIER
+      </button>
+    </form>
+  </section>
+
+  <!-- Liste des Paris -->
+  <section class="glass-effect rounded-2xl p-6">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-xl font-bold flex items-center gap-2">
+        <i data-lucide="list" class="w-5 h-5 text-green-500"></i>
+        Historique des Paris
+      </h2>
+      <div class="flex gap-3">           
+        <button id="resetPari" 
+                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl font-bold flex items-center gap-2 text-sm transition-colors">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-gray-700">
+            <th class="py-4 px-4 text-left">Type</th>
+            <th class="py-4 px-4 text-left">Match(s)</th>
+            <th class="py-4 px-4 text-center">Cote</th>
+            <th class="py-4 px-4 text-center">Mise</th>
+            <th class="py-4 px-4 text-center">Résultat</th>
+            <th class="py-4 px-4 text-center">Gain Potentiel</th>
+            <th class="py-4 px-4 text-center">Date</th>
+            <th class="py-4 px-4 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tablePari" class="divide-y divide-gray-800"></tbody>
+      </table>
+      
+      <div id="emptyState" class="text-center py-12 hidden">
+        <i data-lucide="trophy" class="w-16 h-16 text-gray-600 mx-auto mb-4"></i>
+        <h3 class="text-lg font-bold text-gray-400 mb-2">Aucun pari enregistré</h3>
+        <p class="text-gray-500">Commencez par ajouter votre premier pari !</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Modal Gestion Solde -->
+<div id="modalSolde" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50 p-4">
+  <div class="glass-effect p-6 rounded-2xl shadow-xl w-full max-w-md relative">
+    <button id="fermerModal" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+      <i data-lucide="x" class="w-6 h-6"></i>
+    </button>
+    <h3 class="text-xl font-bold mb-4 text-center gradient-text">Gestion du Solde</h3>
+    
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-300">Type d'opération</label>
+        <select id="typeTransaction" class="w-full border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-green-500 bg-gray-800/50">
+          <option value="depot">Dépôt</option>
+          <option value="retrait">Retrait</option>
+        </select>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-300">Montant (f)</label>
+        <input type="number" step="0.01" id="montantTransaction" placeholder="0.00" required min="0.01"
+               class="w-full border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-green-500 bg-gray-800/50">
+      </div>
+      
+      <div class="flex gap-3">
+        <button id="confirmerTransaction" class="btn-primary text-white rounded-xl px-6 py-3 flex-1 font-bold">
+          Confirmer
+        </button>
+        <button id="annulerTransaction" class="glass-effect text-white rounded-xl px-6 py-3 flex-1 font-bold border border-gray-700">
+          Annuler
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  lucide.createIcons();
+
+  // Variables
+  let solde = parseFloat(localStorage.getItem("solde_pari")) || 0; 
+  let paris = JSON.parse(localStorage.getItem("paris")) || [];
+  let matchCount = 1;
+
+  // Éléments DOM
+  const soldeDisplay = document.getElementById("solde");
+  const tablePari = document.getElementById("tablePari");
+  const emptyState = document.getElementById("emptyState");
+  const modal = document.getElementById("modalSolde");
+
+  // Initialiser le formulaire combiné
+  function initialiserFormulaireCombine() {
+    ajouterMatch();
+    document.getElementById('miseCombine').addEventListener('input', calculerGainPotentiel);
+  }
+
+  // Ajouter un match au formulaire combiné
+  function ajouterMatch() {
+    const container = document.getElementById('matchesContainer');
+    const matchDiv = document.createElement('div');
+    matchDiv.className = 'match-combine';
+    matchDiv.innerHTML = `
+      <h4 class="font-bold mb-3 flex items-center gap-2">
+        <i data-lucide="activity" class="w-4 h-4 text-blue-500"></i>
+        Match ${matchCount}
+      </h4>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-2 text-gray-300">Match</label>
+          <input type="text" class="match-input w-full border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 bg-gray-800/50" placeholder="Ex: PSG vs Marseille" required>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-gray-300">Cote</label>
+          <input type="number" step="0.01" class="cote-input w-full border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 bg-gray-800/50" placeholder="1.50" required min="1.01">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-gray-300">Option</label>
+          <select class="option-input w-full border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 bg-gray-800/50" required>
+            <optgroup label="Résultat Match">
+            <option value="V1">V1</option>
+            <option value="X">X</option>
+            <option value="V2">V2</option>
+            <option value="1X">1X</option>
+            <option value="12">12</option>
+            <option value="2X">2X</option>
+          </optgroup>
+          <optgroup label="Total Buts">
+            <option value="Total Over 0.5">Over 0.5</option>
+            <option value="Total Under 0.5">Under 0.5</option>
+             <option value="Total over 1">over 1</option>
+              <option value="Total Under 1">Under 1</option>
+            <option value="Total Over 1.5">Over 1.5</option>
+            <option value="Total Under 1.5">Under 1.5</option>
+            <option value="Total over 2">over 2</option>
+             <option value="Total Under 2">Under 2</option>
+            <option value="Total Over 2.5">Over 2.5</option>
+            <option value="Total under 2.5">Under 2.5</option>
+            <option value="Total over 3">over 3</option>
+            <option value="Total Under 3">Under 3</option>
+            <option value="Total Over 3.5">Over 3.5</option>
+            <option value="Total Under 3.5">Under 3.5</option>
+          </optgroup>
+          <optgroup label="BTTS">
+            <option value="BTTS Oui">BTTS Oui</option>
+            <option value="BTTS Non">BTTS Non</option>
+          </optgroup>
+          <optgroup label="Corners">
+            <option value="Corner Over 8.5">Corner Over 8.5</option>
+            <option value="Corner Under 8.5">Corner Under 8.5</option>
+            <option value="Corner Over 9.5">Corner Over 9.5</option>
+            <option value="Corner Under 9.5">Corner Under 9.5</option>
+          </optgroup>
+          <optgroup label="Cartons">
+            <option value="Carton Jaune Over 3.5">Carton Jaune Over 3.5</option>
+            <option value="Carton Jaune Under 3.5">Carton Jaune Under 3.5</option>
+            <option value="Carton Rouge Oui">Carton Rouge Oui</option>
+            <option value="Carton Rouge Non">Carton Rouge Non</option>
+            <option value="chaque equipes aura plus de 1 carton">chaque equipes aura plus de 1 carton</option>
+          </optgroup>
+          <optgroup label="handicap"></optgroup>
+          <option value="handicap 1 (-3.5)">handicap 1 (-3.5)</option>
+            <option value="handicap 2 (+3.5)">handicap 2 (+3.5) </option>
+            <option value="handicap 1 (3)">handicap 1 (-3) </option>
+            <option value="handicap 2(3) ">handicap 2(+3) </option>
+            <option value="handicap 1(-2.5) ">handicap 1(-2.5) </option>
+            <option value="handicap 2(+2.5)">handicap 2(+2.5)</option>
+            <option value="handicap 1(-2)">handicap 1(-2) </option>
+            <option value="handicap 2(+2)">handicap 2(+2) </option>
+            <option value="handicap 1(-1.5) ">handicap 1(-1.5) </option>
+            <option value="handicap 2(+1.5) ">handicap 2(+1.5) </option>
+          </select>
+        </div>
+      </div>
+    `;
+    container.appendChild(matchDiv);
+    
+    // Ajouter les écouteurs d'événements pour le calcul automatique
+    const coteInput = matchDiv.querySelector('.cote-input');
+    coteInput.addEventListener('input', calculerCoteTotale);
+    
+    matchCount++;
+    calculerCoteTotale();
+  }
+
+  // Retirer un match du formulaire combiné
+  function retirerMatch() {
+    const container = document.getElementById('matchesContainer');
+    if (container.children.length > 1) {
+      container.removeChild(container.lastChild);
+      matchCount--;
+      calculerCoteTotale();
+    }
+  }
+
+  // Calculer la cote totale
+  function calculerCoteTotale() {
+    const coteInputs = document.querySelectorAll('.cote-input');
+    let coteTotale = 1;
+    
+    coteInputs.forEach(input => {
+      const cote = parseFloat(input.value) || 1;
+      coteTotale *= cote;
+    });
+    
+    document.getElementById('coteTotale').textContent = coteTotale.toFixed(2);
+    calculerGainPotentiel();
+  }
+
+  // Calculer le gain potentiel
+  function calculerGainPotentiel() {
+    const coteTotale = parseFloat(document.getElementById('coteTotale').textContent) || 1;
+    const mise = parseFloat(document.getElementById('miseCombine').value) || 0;
+    const gainPotentiel = mise * coteTotale;
+    
+    document.getElementById('gainPotentiel').textContent = gainPotentiel.toFixed(2) + ' f';
+  }
+
+  // Mettre à jour l'affichage du solde
+
+function majSolde() {
+
+soldeDisplay.textContent = solde.toFixed(2) + " f";
+
+localStorage.setItem("solde_pari", solde);
+localStorage.setItem("depot_initial", solde);
+  
+
+}
+  // Calculer et afficher les statistiques
+  function majStats() {
+    let totalMise = 0, totalGains = 0, gagneCount = 0;
+    
+    paris.forEach(p => {
+      if (p.resultat !== "En cours") {
+        totalMise += parseFloat(p.mise);
+        if (p.resultat === "Gagné") {
+          totalGains += parseFloat(p.mise) * parseFloat(p.cote);
+          gagneCount++;
+        }
+      }
+    });
+
+    const gainsNets = totalGains - totalMise;
+    const parisTermines = paris.filter(p => p.resultat !== "En cours").length;
+    const tauxReussite = parisTermines ? ((gagneCount / parisTermines) * 100) : 0;
+
+    document.getElementById("statNombre").textContent = paris.length;
+    document.getElementById("statMise").textContent = totalMise.toFixed(2) + " f";
+    document.getElementById("statGains").textContent = gainsNets.toFixed(2) + " f";
+    document.getElementById("statReussite").textContent = tauxReussite.toFixed(1) + "%";
+  }
+
+  // Mettre à jour le résultat d'un pari
+  function majResultatPari(index, nouveauResultat) {
+    const pari = paris[index];
+    const ancienResultat = pari.resultat;
+    
+    // Si le pari était déjà terminé, on annule l'ancien calcul
+    if (ancienResultat !== "En cours") {
+      if (ancienResultat === "Gagné") {
+        solde -= pari.mise * pari.cote; // On retire les gains précédents
+      } else if (ancienResultat === "Rembourser") {
+        solde -= pari.mise; // On retire le remboursement
+      }
+      // Si c'était perdu, on ne fait rien car la mise était déjà déduite
+    }
+    
+    // Appliquer le nouveau résultat
+    pari.resultat = nouveauResultat;
+    
+    if (nouveauResultat === "Gagné") {
+      solde += pari.mise * pari.cote; // On ajoute les gains
+    } else if (nouveauResultat === "Rembourser") {
+      solde += pari.mise; // On rembourse la mise
+    }
+    // Si c'est perdu ou en cours, on ne fait rien
+    
+    localStorage.setItem("paris", JSON.stringify(paris));
+    majSolde();
+    majStats();
+    afficherParis();
+  }
+
+  // Afficher les paris
+  function afficherParis() {
+    tablePari.innerHTML = "";
+    
+    if (paris.length === 0) {
+      emptyState.classList.remove("hidden");
+      return;
+    }
+    
+    emptyState.classList.add("hidden");
+
+    paris.forEach((p, index) => {
+      const gainPotentiel = (p.mise * p.cote).toFixed(2);
+      let resultatClass = "";
+      let resultatIcon = "";
+      let typeIcon = p.type === 'combiné' ? 'layers' : 'star';
+      let typeColor = p.type === 'combiné' ? 'text-blue-500' : 'text-green-500';
+      
+      switch(p.resultat) {
+        case "Gagné":
+          resultatClass = "result-gagne";
+          resultatIcon = "check-circle";
+          break;
+        case "Perdu":
+          resultatClass = "result-perdu";
+          resultatIcon = "x-circle";
+          break;
+        case "Rembourser":
+          resultatClass = "result-rembourse";
+          resultatIcon = "refresh-cw";
+          break;
+        case "En cours":
+          resultatClass = "result-encours pulse-encours";
+          resultatIcon = "clock";
+          break;
+      }
+
+      const tr = document.createElement("tr");
+      tr.className = `transaction-card ${resultatClass}`;
+      
+      // Actions disponibles selon le statut
+      let actionsHTML = '';
+      if (p.resultat === "En cours") {
+        actionsHTML = `
+          <div class="action-buttons">
+            <button class="action-btn btn-gagne" onclick="majResultatPari(${index}, 'Gagné')">
+              Gagné
+            </button>
+            <button class="action-btn btn-perdu" onclick="majResultatPari(${index}, 'Perdu')">
+              Perdu
+            </button>
+          </div>
+        `;
+      } else {
+        actionsHTML = ``;
+      }
+
+      if (p.type === 'combiné') {
+        // Affichage pour les paris combinés
+        tr.innerHTML = `
+          <td class="py-4 px-4">
+            <div class="flex items-center gap-2 ${typeColor}">
+              <i data-lucide="${typeIcon}" class="w-4 h-4"></i>
+              <span class="font-bold">Combiné (${p.nombreMatchs} matchs)</span>
+            </div>
+          </td>
+          <td class="py-4 px-4">
+            <div class="space-y-1">
+              ${p.matches.map(match => `
+                <div class="text-sm">
+                  <span class="font-medium">${match.match}</span>
+                  <span class="text-gray-400 ml-2">${match.option} @${match.cote}</span>
+                </div>
+              `).join('')}
+            </div>
+          </td>
+          <td class="py-4 px-4 text-center font-bold">${p.cote}</td>
+          <td class="py-4 px-4 text-center">${parseFloat(p.mise).toFixed(2)} f</td>
+          <td class="py-4 px-4 text-center">
+            <div class="flex items-center justify-center gap-1">
+              <i data-lucide="${resultatIcon}" class="w-4 h-4 ${
+                p.resultat === 'Gagné' ? 'text-green-500' : 
+                p.resultat === 'Perdu' ? 'text-red-500' : 
+                p.resultat === 'Rembourser' ? 'text-yellow-500' : 'text-blue-500'
+              }"></i>
+              ${p.resultat}
+            </div>
+          </td>
+          <td class="py-4 px-4 text-center font-bold ${
+            p.resultat === 'Gagné' ? 'text-green-500' : 
+            p.resultat === 'En cours' ? 'text-blue-500' : 'text-gray-400'
+          }">
+            ${gainPotentiel} f
+          </td>
+          <td class="py-4 px-4 text-center text-sm">${p.date}</td>
+          <td class="py-4 px-4 text-center">
+            ${actionsHTML}
+          </td>
+        `;
+      } else {
+        // Affichage pour les paris simples
+        tr.innerHTML = `
+          <td class="py-4 px-4">
+            <div class="flex items-center gap-2 ${typeColor}">
+              <i data-lucide="${typeIcon}" class="w-4 h-4"></i>
+              <span class="font-bold">Simple</span>
+            </div>
+          </td>
+          <td class="py-4 px-4">
+            <div class="font-medium">${p.match}</div>
+            <div class="text-xs text-gray-400">${p.option}</div>
+          </td>
+          <td class="py-4 px-4 text-center font-bold">${p.cote}</td>
+          <td class="py-4 px-4 text-center">${parseFloat(p.mise).toFixed(2)} f</td>
+          <td class="py-4 px-4 text-center">
+            <div class="flex items-center justify-center gap-1">
+              <i data-lucide="${resultatIcon}" class="w-4 h-4 ${
+                p.resultat === 'Gagné' ? 'text-green-500' : 
+                p.resultat === 'Perdu' ? 'text-red-500' : 
+                p.resultat === 'Rembourser' ? 'text-yellow-500' : 'text-blue-500'
+              }"></i>
+              ${p.resultat}
+            </div>
+          </td>
+          <td class="py-4 px-4 text-center font-bold ${
+            p.resultat === 'Gagné' ? 'text-green-500' : 
+            p.resultat === 'En cours' ? 'text-blue-500' : 'text-gray-400'
+          }">
+            ${gainPotentiel} f
+          </td>
+          <td class="py-4 px-4 text-center text-sm">${p.date}</td>
+          <td class="py-4 px-4 text-center">
+            ${actionsHTML}
+          </td>
+        `;
+      }
+      
+      tablePari.appendChild(tr);
+    });
+
+    lucide.createIcons();
+  }
+
+  // Gestion du formulaire simple
+  document.getElementById("pariForm").addEventListener("submit", e => {
+    e.preventDefault();
+    
+    const match = document.getElementById("match").value.trim();
+    const cote = parseFloat(document.getElementById("cote").value);
+    const mise = parseFloat(document.getElementById("mise").value);
+    const option = document.getElementById("option").value;
+
+    if (!match || isNaN(cote) || isNaN(mise) || !option) {
+      alert("Veuillez remplir tous les champs correctement");
+      return;
+    }
+
+    // Vérifier que la mise ne dépasse pas le solde
+    if (mise > solde) {
+      alert("Solde insuffisant pour ce pari !");
+      return;
+    }
+
+    const now = new Date();
+    const date = now.getDate().toString().padStart(2,'0')+"/"+(now.getMonth()+1).toString().padStart(2,'0')+"/"+now.getFullYear();
+    const heure = now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
+    const jour = now.toLocaleDateString('fr-FR', {weekday:'long'});
+
+    // Créer le pari avec statut "En cours"
+    paris.push({
+      type: 'simple',
+      match, 
+      cote, 
+      mise, 
+      option, 
+      resultat: "En cours", // Statut initial
+      date, 
+      heure, 
+      jour
+    });
+    localStorage.setItem("paris", JSON.stringify(paris));
+
+    // DÉDUCTION IMMÉDIATE DE LA MISE
+    solde -= mise;
+    
+    majSolde();
+    majStats();
+    afficherParis();
+    e.target.reset();
+
+    // Animation de confirmation
+    const button = e.target.querySelector('button');
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Pari ajouté !';
+    button.classList.add('bg-green-600');
+    setTimeout(() => {
+      button.innerHTML = originalText;
+      button.classList.remove('bg-green-600');
+    }, 2000);
+  });
+
+  // Gestion du formulaire combiné
+  document.getElementById("pariCombineForm").addEventListener("submit", e => {
+    e.preventDefault();
+    
+    const mise = parseFloat(document.getElementById("miseCombine").value);
+    const coteTotale = parseFloat(document.getElementById("coteTotale").textContent);
+
+    // Récupérer tous les matchs
+    const matches = [];
+    const matchElements = document.querySelectorAll('.match-combine');
+    
+    matchElements.forEach((matchEl, index) => {
+      const matchInput = matchEl.querySelector('.match-input');
+      const coteInput = matchEl.querySelector('.cote-input');
+      const optionInput = matchEl.querySelector('.option-input');
+      
+      if (!matchInput.value.trim() || !coteInput.value || !optionInput.value) {
+        alert(`Veuillez remplir tous les champs pour le match ${index + 1}`);
+        return;
+      }
+      
+      matches.push({
+        match: matchInput.value.trim(),
+        cote: parseFloat(coteInput.value),
+        option: optionInput.value
+      });
+    });
+
+    if (matches.length < 2) {
+      alert("Un pari combiné doit contenir au moins 2 matchs");
+      return;
+    }
+
+    // Vérifier que la mise ne dépasse pas le solde
+    if (mise > solde) {
+      alert("Solde insuffisant pour ce pari !");
+      return;
+    }
+
+    const now = new Date();
+    const date = now.getDate().toString().padStart(2,'0')+"/"+(now.getMonth()+1).toString().padStart(2,'0')+"/"+now.getFullYear();
+    const heure = now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
+    const jour = now.toLocaleDateString('fr-FR', {weekday:'long'});
+
+    // Créer le pari combiné avec statut "En cours"
+    paris.push({
+      type: 'combiné',
+      matches,
+      cote: coteTotale,
+      mise,
+      resultat: "En cours", // Statut initial
+      date,
+      heure,
+      jour,
+      nombreMatchs: matches.length
+    });
+    localStorage.setItem("paris", JSON.stringify(paris));
+
+    // DÉDUCTION IMMÉDIATE DE LA MISE
+    solde -= mise;
+    
+    majSolde();
+    majStats();
+    afficherParis();
+    e.target.reset();
+    
+    // Réinitialiser le formulaire combiné
+    document.getElementById('matchesContainer').innerHTML = '';
+    matchCount = 1;
+    ajouterMatch();
+
+    // Animation de confirmation
+    const button = e.target.querySelector('button');
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Pari combiné ajouté !';
+    button.classList.add('bg-green-600');
+    setTimeout(() => {
+      button.innerHTML = originalText;
+      button.classList.remove('bg-green-600');
+    }, 2000);
+  });
+
+  // Gestion des onglets
+  document.getElementById("tabSimple").addEventListener("click", () => {
+    document.getElementById("formSimple").classList.remove("hidden");
+    document.getElementById("formCombine").classList.add("hidden");
+    document.getElementById("tabSimple").classList.add("bg-green-500", "text-white");
+    document.getElementById("tabSimple").classList.remove("glass-effect", "text-gray-300");
+    document.getElementById("tabCombine").classList.remove("bg-blue-500", "text-white");
+    document.getElementById("tabCombine").classList.add("glass-effect", "text-gray-300");
+  });
+
+  document.getElementById("tabCombine").addEventListener("click", () => {
+    document.getElementById("formSimple").classList.add("hidden");
+    document.getElementById("formCombine").classList.remove("hidden");
+    document.getElementById("tabCombine").classList.add("bg-blue-500", "text-white");
+    document.getElementById("tabCombine").classList.remove("glass-effect", "text-gray-300");
+    document.getElementById("tabSimple").classList.remove("bg-green-500", "text-white");
+    document.getElementById("tabSimple").classList.add("glass-effect", "text-gray-300");
+  });
+
+  // Gestion des boutons ajouter/retirer matchs
+  document.getElementById("addMatch").addEventListener("click", ajouterMatch);
+  document.getElementById("removeMatch").addEventListener("click", retirerMatch);
+
+  // Gestion du modal de solde
+  document.getElementById("soldeCard").addEventListener("click", () => {
+    document.getElementById("montantTransaction").value = "";
+    modal.classList.remove("hidden");
+  });
+
+  document.getElementById("fermerModal").addEventListener("click", () => {
+    modal.classList.add("hidden");
+  });
+
+  document.getElementById("annulerTransaction").addEventListener("click", () => {
+    modal.classList.add("hidden");
+  });
+
+  document.getElementById("confirmerTransaction").addEventListener("click", () => {
+    const type = document.getElementById("typeTransaction").value;
+    const montant = parseFloat(document.getElementById("montantTransaction").value);
+    
+    if (!isNaN(montant) && montant > 0) {
+      solde += type === "depot" ? montant : -montant;
+      majSolde();
+      modal.classList.add("hidden");
+    } else {
+      alert("Veuillez saisir un montant valide");
+    }
+  });
+
+  modal.addEventListener("click", e => {
+    if (e.target === modal) {
+      modal.classList.add("hidden");
+    }
+  });
+
+    // récupérer dépôt initial
+
+    document.getElementById("resetPari").addEventListener("click", () => {
+  if (confirm("Réinitialiser les paris et revenir au dépôt initial ?")) {
+
+    // Reset paris
+    paris = [];
+    solde = 500;
+    localStorage.removeItem("paris");
+      localStorage.setItem("solde_pari", 500);
+
+    majsolde();
+    majStats();
+    afficherParis();    
+  }
+});
+  // Initialisation
+  document.addEventListener('DOMContentLoaded', function() {
+    majSolde();
+    majStats();
+    afficherParis();
+    initialiserFormulaireCombine();
+    lucide.createIcons();
+  });
+  </script>
+
+</body>
+</html>
